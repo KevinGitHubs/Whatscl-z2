@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Login Whatscl</title>
+</head>
+<body>
+  <h2>Login dengan Nomor WhatsApp</h2>
+  <input type="text" id="phone" placeholder="Nomor WhatsApp (tanpa +)">
+  <button onclick="sendOTP()">Kirim OTP</button><br><br>
+  <input type="text" id="otp" placeholder="Kode OTP">
+  <button onclick="verifyOTP()">Verifikasi</button>
+
+  <script>
+    const API = '/api';
+
+    async function sendOTP() {
+      const phone = document.getElementById('phone').value;
+      const res = await fetch(`${API}/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      });
+      const data = await res.json();
+      alert(data.success ? 'OTP dikirim' : 'Gagal kirim OTP');
+    }
+
+    async function verifyOTP() {
+      const phone = document.getElementById('phone').value;
+      const otp = document.getElementById('otp').value;
+      const res = await fetch(`${API}/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, otp })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        location.href = 'admin.html';
+      } else {
+        alert('OTP salah');
+      }
+    }
+  </script>
+</body>
+</html>
