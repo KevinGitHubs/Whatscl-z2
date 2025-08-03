@@ -1,11 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Whatscl</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whatscl - Modern Chat</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
-<body>
-  <h1>Selamat Datang di Whatscl</h1>
-  <a href="login.html">Login dengan WhatsApp</a>
+<body class="bg-gray-100 font-sans">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-1/3 bg-white border-r">
+      <header class="p-4 bg-green-500 text-white text-xl font-bold">Whatscl</header>
+      <div class="p-2">
+        <input class="w-full p-2 border rounded" placeholder="Cari chat..." />
+      </div>
+      <ul class="overflow-y-auto h-full">
+        <li class="flex p-3 hover:bg-gray-100 cursor-pointer" onclick="location.href='login.html'">
+          <img class="w-12 h-12 rounded-full" src="https://i.pravatar.cc/40?u=1" />
+          <div class="ml-3">
+            <div class="font-semibold">Login dengan WhatsApp</div>
+            <div class="text-sm text-gray-500">Klik untuk login</div>
+          </div>
+        </li>
+        <li class="flex p-3 hover:bg-gray-100 cursor-pointer" onclick="location.href='admin.html'">
+          <img class="w-12 h-12 rounded-full" src="https://i.pravatar.cc/40?u=2" />
+          <div class="ml-3">
+            <div class="font-semibold">Mode Admin</div>
+            <div class="text-sm text-gray-500">Kode: SDgyueo</div>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Chat Area -->
+    <main class="flex-1 flex flex-col">
+      <header class="p-4 bg-green-500 text-white font-bold">Chat</header>
+      <div class="flex-1 p-4 flex items-center justify-center text-gray-500">
+        Pilih chat di sidebar untuk memulai
+      </div>
+    </main>
+  </div>
 </body>
-</html>
+  </html>
