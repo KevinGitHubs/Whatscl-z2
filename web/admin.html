@@ -1,0 +1,44 @@
+here<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Whatscl</title>
+</head>
+<body>
+  <h2>Mode Admin</h2>
+  <input type="password" id="adminCode" placeholder="Masukkan kode admin">
+  <button onclick="adminLogin()">Masuk</button>
+  <div id="chats"></div>
+
+  <script>
+    const API = '/api';
+
+    async function adminLogin() {
+      const code = document.getElementById('adminCode').value;
+      const res = await fetch(`${API}/admin-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem('adminToken', data.token);
+        loadChats();
+      } else {
+        alert('Kode salah');
+      }
+    }
+
+    async function loadChats() {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`${API}/chats`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const chats = await res.json();
+      document.getElementById('chats').innerHTML = chats.map(c =>
+        `<p><strong>${c.name}</strong>: ${c.lastMessage}</p>`
+      ).join('');
+    }
+  </script>
+</body>
+</html>
