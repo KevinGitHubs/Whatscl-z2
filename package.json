@@ -1,0 +1,10 @@
+{
+  "name": "whatscl",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "whatsapp-web.js": "^1.23.0",
+    "crypto-js": "^4.2.0"
+  }
+}
