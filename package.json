@@ -1,6 +1,9 @@
 {
-  "name": "whatscl",
+  "name": "whatscl-z2",
   "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'No build needed'"
+  },
   "dependencies": {
     "express": "^4.19.2",
     "cors": "^2.8.5",
