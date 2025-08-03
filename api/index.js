@@ -1,20 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const CryptoJS = require('crypto-js');
 const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+const CryptoJS = require('crypto-js');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
+app.use(express.static('web'));
 
-const client = new Client({
-  authStrategy: new LocalAuth()
-});
+const client = new Client({ authStrategy: new LocalAuth() });
+const secretKey = 'SDgyueo';
+const otpStore = {};
 
-client.on('qr', qr => {
+client.on('qr', (qr) => {
   console.log('Scan QR dengan WhatsApp:');
-  qrcode.generate(qr, { small: true });
+  require('qrcode-terminal').generate(qr, { small: true });
 });
 
 client.on('ready', () => {
@@ -22,9 +24,6 @@ client.on('ready', () => {
 });
 
 client.initialize();
-
-const secretKey = 'SDgyueo';
-const otpStore = {};
 
 function encrypt(text) {
   return CryptoJS.AES.encrypt(text, secretKey).toString();
@@ -36,7 +35,7 @@ function decrypt(cipherText) {
 }
 
 // Kirim OTP via WhatsApp
-app.post('/api/send-otp', async (req, res) => {
+app.post('/send-otp', async (req, res) => {
   const { phone } = req.body;
   const otp = Math.floor(100000 + Math.random() * 900000);
   const message = `Kode OTP Whatscl Anda: ${otp}`;
@@ -50,7 +49,7 @@ app.post('/api/send-otp', async (req, res) => {
 });
 
 // Verifikasi OTP
-app.post('/api/verify-otp', (req, res) => {
+app.post('/verify-otp', (req, res) => {
   const { phone, otp } = req.body;
   if (otpStore[phone] == otp) {
     res.json({ success: true, token: encrypt(phone) });
@@ -60,7 +59,7 @@ app.post('/api/verify-otp', (req, res) => {
 });
 
 // Login admin
-app.post('/api/admin-login', (req, res) => {
+app.post('/admin-login', (req, res) => {
   const { code } = req.body;
   if (code === 'SDgyueo') {
     res.json({ success: true, token: encrypt('admin') });
@@ -69,10 +68,10 @@ app.post('/api/admin-login', (req, res) => {
   }
 });
 
-// Ambil semua chat (admin only)
-app.get('/api/chats', async (req, res) => {
+// Ambil semua chat untuk admin
+app.get('/chats', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
-  if (decrypt(token) !== 'admin') return res.status(403).json({ error: 'Akses ditolak' });
+  if (decrypt(token) !== 'admin') return res.status(403).json({ error: 'Forbidden' });
 
   try {
     const chats = await client.getChats();
@@ -87,4 +86,11 @@ app.get('/api/chats', async (req, res) => {
   }
 });
 
-module.exports = app;
+// Serve frontend statis
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/web/index.html');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server berjalan di port ${PORT}`);
+});
