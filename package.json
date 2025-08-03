@@ -1,8 +1,10 @@
 {
-  "name": "whatscl-z2",
+  "name": "whatscl",
   "version": "1.0.0",
+  "description": "Whatscl dengan UI modern dan backend WhatsApp",
+  "main": "api/index.js",
   "scripts": {
-    "build": "echo 'No build needed'"
+    "start": "node api/index.js"
   },
   "dependencies": {
     "express": "^4.19.2",
