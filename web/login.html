@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Login Whatscl</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
-<body>
-  <h2>Login dengan Nomor WhatsApp</h2>
-  <input type="text" id="phone" placeholder="Nomor WhatsApp (tanpa +)">
-  <button onclick="sendOTP()">Kirim OTP</button><br><br>
-  <input type="text" id="otp" placeholder="Kode OTP">
-  <button onclick="verifyOTP()">Verifikasi</button>
-
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+    <h1 class="text-xl font-bold mb-4">Login Whatscl</h1>
+    <input id="phone" class="w-full mb-2 p-2 border rounded" placeholder="Nomor WhatsApp (tanpa +)">
+    <button onclick="sendOTP()" class="w-full bg-green-500 text-white mb-2">Kirim OTP</button>
+    <input id="otp" class="w-full mb-2 p-2 border rounded" placeholder="Kode OTP">
+    <button onclick="verifyOTP()" class="w-full bg-blue-500 text-white">Verifikasi</button>
+  </div>
   <script>
-    const API = '/api';
-
     async function sendOTP() {
       const phone = document.getElementById('phone').value;
-      const res = await fetch(`${API}/send-otp`, {
+      await fetch('/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone })
       });
-      const data = await res.json();
-      alert(data.success ? 'OTP dikirim' : 'Gagal kirim OTP');
+      alert('OTP dikirim ke WhatsApp Anda');
     }
 
     async function verifyOTP() {
       const phone = document.getElementById('phone').value;
       const otp = document.getElementById('otp').value;
-      const res = await fetch(`${API}/verify-otp`, {
+      const res = await fetch('/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, otp })
